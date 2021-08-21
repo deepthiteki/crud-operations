@@ -1,5 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const util = require("util");
+const GridFsStorage = require("multer-gridfs-storage")
+
 
 // create express app
 const app = express();
@@ -13,6 +17,8 @@ app.use(bodyParser.json())
 // Configuring the database
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
+
+
 
 mongoose.Promise = global.Promise;
 

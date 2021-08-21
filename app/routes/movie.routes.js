@@ -11,8 +11,8 @@ module.exports = (app) => {
     app.get('/movies/:movieName', movies.findOne);
 
     // Update a Movie with movieName
-    app.put('/movies/:movieName', movies.update);
+    app.put('/movies/:id', movies.update);
 
     // Delete a Movie with movieName
-    app.delete('/movies/:movieName', movies.delete);
+    app.delete('/movies/:id', movies.delete);
 }

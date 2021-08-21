@@ -1,4 +1,5 @@
 const Movie = require('../models/movie.model.js');
+const fs = require('fs')
 
 // Create and Save a new Movie
 exports.create = (req, res) => {
@@ -12,12 +13,15 @@ exports.create = (req, res) => {
     // Create a Movie
     const movie = new Movie({
         name: req.body.name,
-        img : req.body.img,
-        summary : req.body.summary
+        img_url : req.body.img,
+        summary : req.body.summary,
+        
         
     });
 
-    // Save Movie in the database
+    // Save Movie in the 
+    movie.img.data = fs.readFileSync(req.readFileSync.userPhoto.path)
+    movie.img.contentType = 'image/png';
     movie.save()
     .then(data => {
         res.send(data);
@@ -26,6 +30,9 @@ exports.create = (req, res) => {
             message: err.message || "Some error occurred while creating the Movie."
         });
     });
+
+
+
 };
 
 // Retrieve and return all movies from the database.
@@ -65,14 +72,16 @@ exports.findOne = (req, res) => {
 // Update a movie identified by the movieName in the request
 exports.update = (req, res) => {
     // Validate Request
-    if(!req.body.content) {
+    //change content to name
+    console.log(req.body);
+    if(!req.body.summary) {
         return res.status(400).send({
             message: "Movie content can not be empty"
         });
     }
 
     // Find movie and update it with the request body
-    Movie.findByIdAndUpdate(req.params.movieName, {
+    Movie.findByIdAndUpdate(req.params.id, {
         name: req.body.name,
         img : req.body.img,
         summary : req.body.summary
@@ -80,7 +89,7 @@ exports.update = (req, res) => {
     .then(movie => {
         if(!movie) {
             return res.status(404).send({
-                message: "Movie not found with name " + req.params.movieName
+                message: "Movie not found with name1 " + req.params.movieName
             });
         }
         res.send(movie);
@@ -98,11 +107,11 @@ exports.update = (req, res) => {
 
 // Delete a movie with the specified movieName in the request
 exports.delete = (req, res) => {
-    Note.findByIdAndRemove(req.params.movieName)
+    Movie.findByIdAndRemove(req.params.id)
     .then(movie => {
         if(!movie) {
             return res.status(404).send({
-                message: "Movie not found with name " + req.params.movieName
+                message: "Movie not found with name " + req.params.id
             });
         }
         res.send({message: "Movie deleted successfully!"});
